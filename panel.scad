@@ -45,10 +45,10 @@ module panel_relief(thickness) {
 board_width = 60;
 board_length = 100;
 slack = 0.5;
-sidewall = 6;
+sidewall = 8;
 width = board_width + 2 * slack + 2 * sidewall;
 length = board_length + 2 * slack + 2 * sidewall;
-corner_r = 4;
+corner_r = 5;
 m3_thread = 2.9;
 m3_shaft = 3.2;
 m3_cap = 6;
