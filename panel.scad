@@ -120,9 +120,9 @@ component_height = 10;
 arduino_depth = 16;
 height = 2 * sheet_thickness + component_height + pcb_thickness
        + arduino_depth;
-lid_height = sheet_thickness + component_height + pcb_thickness;
+lid_height = height / 2;
 base_height = height - lid_height;
-  
+
 module shell() {
   difference() {
     union() {
@@ -158,15 +158,6 @@ module shell() {
       translate([-54.5, 0, -13]) cube([12, length, 14]);
     }
 
-  }
-}
-
-module base() {
-  difference() {
-    shell();
-    translate([-width / 2 - $e, -length / 2 - $e, base_height])
-      cube([width + 2 * $e, length + 2 * $e, height]);
-
     // channel for antenna clips
     // these are mostly a 5mm cylinder, with a 5mm square section around the
     // screw hole. For simplicity of printing (because vertical holes never
@@ -177,7 +168,15 @@ module base() {
       -width / 2 - $e,
       -board_length / 2 + 15 - 2.5,
       height - sheet_thickness - component_height - pcb_thickness - 6
-    ]) cube([width + 2 * $e, 5, height]);
+    ]) cube([width + 2 * $e, 5, 6]);
+  }
+}
+
+module base() {
+  difference() {
+    shell();
+    translate([-width / 2 - $e, -length / 2 - $e, base_height])
+      cube([width + 2 * $e, length + 2 * $e, height]);
   }
 }
 
