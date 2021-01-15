@@ -27,6 +27,7 @@ module panel_cuts() {
       translate([-2, 0.5]) square([4, 4]);
     }
 
+    // knobs
     for (y = knob_offsets) for (x = panel_cols) {
       translate([x, y]) circle(7.5/2);
     }
@@ -34,26 +35,28 @@ module panel_cuts() {
 }
 
 module panel_relief(thickness) {
-  component_thickness = 2;
+  mount_thickness = 2;
   led_w = 7;
   led_h = 12;
   led_thickness = 1;
 
+  // LEDs protrude slightly past the pots
   translate([-board_width / 2, -board_length / 2, 0]) {
     translate([panel_cols[1] - led_w/2, led_button_offset - led_h/2, led_thickness])
       cube([led_w, led_h, thickness]);
   }
-  translate([-20, -30, component_thickness])
+
+  // slim panel overall where components pass through
+  translate([-20, -30, mount_thickness])
     cube([40, 70, thickness]);
 }
 
 board_width = 60;
 board_length = 100;
 slack = 0.5;
-sidewall = 5;
+sidewall = 6;
 width = board_width + 2 * slack + 2 * sidewall;
 length = board_length + 2 * slack + 2 * sidewall;
-panel_thickness = 3;
 lid_thickness = 5;
 corner_r = 4;
 m3_thread = 2.9;
@@ -88,15 +91,6 @@ module pcb() {
   }
 }
 
-module outer_shell(depth) {
-  hull() {
-    for (ky = [-1, 1]) for (kx = [-1, 1]) {
-      translate([kx * (width / 2 - corner_r), ky * (length / 2 - corner_r), 0])
-        cylinder(r = corner_r, h = depth);
-    }
-  }
-}
-
 module three_wall(depth) {
   loci = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
 
@@ -112,15 +106,6 @@ module three_wall(depth) {
   }
 }
 
-pcb_thickness = 1.6;
-
-    /*
-    translate([board_width / 2, 0, base_height - pcb_thickness]) {
-      translate([-25, 0, -11]) cube([13, length, 20]);
-      translate([-38, 0, -6]) cube([6, length, 20]);
-      translate([-53.5, 0, -12]) cube([10, length, 20]);
-    }
-    */
 
 module outset_pcb(amount) {
   kx = (width + 2 * amount) / width;
@@ -128,6 +113,7 @@ module outset_pcb(amount) {
   scale([kx, ky]) pcb();
 }
 
+pcb_thickness = 1.6;
 wall = 3;
 sheet_thickness = 3;
 component_height = 10;
@@ -140,17 +126,38 @@ base_height = height - lid_height;
 module shell() {
   difference() {
     union() {
+      // thick walls on three sides
       three_wall(height);
+      // thin wall for connector side
       linear_extrude(height = height) outset_pcb(wall + slack);
+      // rounded rectangle front panel
       translate([0, 0, height - sheet_thickness])
         hull() three_wall(sheet_thickness);
     }
+
+    // volume for circuitry
     translate([0, 0, sheet_thickness])
       linear_extrude(height = height - 2 * sheet_thickness)
         outset_pcb(slack);
+
+    // screw holes
     translate([0, 0, -$e]) screws(m3_thread, height - sheet_thickness - $e);
     translate([0, 0, -$e]) screws(m3_shaft, base_height + 2*$e);
     translate([0, 0, -$e]) screws(m3_cap, base_height + $e - 4);
+
+    // cutouts for connectors
+    // datum is bottom left centre of circuit board
+    // because we just chop these out along the y axis
+    translate([
+      board_width / 2,
+      0,
+      height - sheet_thickness - component_height - pcb_thickness
+    ]) {
+      translate([-26, 0, -12]) cube([15, length, 13]);
+      translate([-37, 0, -7]) cube([8, length, 8]);
+      translate([-54.5, 0, -13]) cube([12, length, 14]);
+    }
+
   }
 }
 
