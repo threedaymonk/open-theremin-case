@@ -5,8 +5,8 @@ OUTPUTS = $(patsubst %.scad,%.stl,$(SOURCES))
 
 all: $(OUTPUTS)
 
-%.stl: %.scad
-	openscad -o $@ $<
+%.stl: %.scad case.scad
+	openscad -D '$$fs=0.1' -D '$$fa=0.1' -o $@ $<
 
 clean:
 	rm -f $(OUTPUTS)
