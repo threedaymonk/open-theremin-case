@@ -109,6 +109,7 @@ height = 2 * sheet_thickness + component_height + pcb_thickness
        + arduino_depth;
 lid_height = height / 2;
 base_height = height - lid_height;
+antenna_separation = 75;
 
 module shell() {
   difference() {
@@ -156,6 +157,16 @@ module shell() {
       -board_length / 2 + 15 - 2.5,
       height - sheet_thickness - component_height - pcb_thickness - 6
     ]) cube([width + 2 * $e, 5, 6]);
+
+    for (m = [0, 1]) {
+      mirror([m, 0, 0]) {
+        translate([
+          antenna_separation / 2,
+          -board_length / 2 + 15,
+          height - sheet_thickness - component_height - pcb_thickness - 3
+        ]) rotate([0, 90, 0]) cylinder(r = 4, h = 100);
+      }
+    }
   }
 }
 
