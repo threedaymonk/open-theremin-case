@@ -140,7 +140,7 @@ module shell() {
       height - sheet_thickness - component_height - pcb_thickness
     ]) {
       translate([-26, 0, -12]) cube([15, length, 13]);
-      translate([-37, 0, -7]) cube([8, length, 8]);
+      translate([-39, 0, -6]) cube([7, length, 7]);
       translate([-54.5, 0, -13]) cube([12, length, 14]);
     }
 
