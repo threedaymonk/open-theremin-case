@@ -8,15 +8,6 @@ led_button_offset = 32;
 
 module panel_cuts() {
   translate([-board_width / 2, -board_length / 2]) {
-      /*
-      // antenna
-      translate([3.5, 15]) circle(3.2/2);
-      translate([56.5, 15]) circle(3.2/2);
-
-      // ground
-      translate([6, 96.5]) circle(3.2/2);
-      */
-
     // function
     translate([panel_cols[0], led_button_offset]) circle(9.5/2);
 
@@ -57,14 +48,11 @@ slack = 0.5;
 sidewall = 6;
 width = board_width + 2 * slack + 2 * sidewall;
 length = board_length + 2 * slack + 2 * sidewall;
-lid_thickness = 5;
 corner_r = 4;
 m3_thread = 2.9;
 m3_shaft = 3.2;
 m3_cap = 6;
 layer = 0.2;
-min_z = layer * 4;
-panel_offset = 10;
 
 module screws(d, h) {
   r = d / 2;
@@ -105,7 +93,6 @@ module three_wall(depth) {
     }
   }
 }
-
 
 module outset_pcb(amount) {
   kx = (width + 2 * amount) / width;
