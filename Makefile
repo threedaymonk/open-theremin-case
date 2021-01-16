@@ -1,4 +1,4 @@
-SOURCES = ot3-top.stl ot3-bottom.stl ot3-clicker.stl
+SOURCES = ot3-top.stl ot3-bottom.stl ot3-clicker.stl mic-clamp.stl
 OUTPUTS = $(patsubst %.scad,%.stl,$(SOURCES))
 
 .PHONY: all clean
