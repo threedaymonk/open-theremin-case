@@ -99,7 +99,7 @@ module outset_pcb(amount) {
 }
 
 pcb_thickness = 1.6;
-wall = 3;
+wall = 2;
 sheet_thickness = 3;
 component_height = 10;
 arduino_depth = 16;
